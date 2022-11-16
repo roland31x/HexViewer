@@ -14,13 +14,13 @@ namespace hexviewer
         {
             string path;
             var directory = VisualStudioProvider.TryGetSolutionDirectoryInfo();
-            // if directory found
-            path = directory.FullName.ToString();
-            Console.WriteLine(path);
+            // if directory found           
             if (directory != null)
             {
-                path += @"\hexviewer\testfolder\TextFile1.txt";
+                path = directory.FullName.ToString();
+                path += @"\hexviewer\testfolder\TextFile1.txt"; // schimbam aici ce fisier citim din testfolder.
                 Console.WriteLine(path);
+                Console.WriteLine();
             }
             else
             {
