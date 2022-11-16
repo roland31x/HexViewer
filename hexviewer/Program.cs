@@ -7,11 +7,26 @@ using System.Threading.Tasks;
 
 namespace hexviewer
 {
+
     internal class Program
     {
         static void Main(string[] args)
         {
-            string path = "test.txt";
+            string path;
+            var directory = VisualStudioProvider.TryGetSolutionDirectoryInfo();
+            // if directory found
+            path = directory.FullName.ToString();
+            Console.WriteLine(path);
+            if (directory != null)
+            {
+                path += @"\hexviewer\testfolder\TextFile1.txt";
+                Console.WriteLine(path);
+            }
+            else
+            {
+                Console.WriteLine("eroare de gasire fisier (oops)");
+                return;
+            }
             int count = 0;
             int offset = 0;
             int offsetcount = 0;
@@ -171,6 +186,18 @@ namespace hexviewer
             {
                 Console.Write(r[i]);
             }
+        }
+    }
+    public static class VisualStudioProvider // pentru a fi mai usor de citit fisiere, fisierele se pun in folderul testfolder.
+    {
+        public static DirectoryInfo TryGetSolutionDirectoryInfo(string currentPath = null)
+        {
+            var directory = new DirectoryInfo(currentPath ?? Directory.GetCurrentDirectory());
+            while (directory != null && !directory.GetFiles("*.sln").Any())
+            {
+                directory = directory.Parent;
+            }
+            return directory;
         }
     }
 }
