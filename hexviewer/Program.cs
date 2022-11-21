@@ -27,18 +27,17 @@ namespace hexviewer
         {
             int count = 0;
             int offset = 0;
-            int offsetcount = 0;
             Console.WriteLine(" Offset  |                Valori Caractere Hex             |     Continut");
             Console.WriteLine("-----------------------------------------------------------------------------");
             using (FileStream fs = File.OpenRead(path))
             {
-                byte[] b = new byte[1];
-                int[] bytes = new int[16];
+                byte[] b = new byte[1];  // stocheaza byte-ul din filestream
+                int[] bytes = new int[16]; // stocheaza caracterele citite 
                 while ((fs.Read(b, 0, b.Length)) > 0)
                 {
                     if (count == 0)
                     {
-                        ConvertToHex(offset, ref count);
+                        ConvertToHexOffset(offset);
                         offset++;
                         Console.Write("0 ");
                         Console.Write(": ");
@@ -123,7 +122,7 @@ namespace hexviewer
                 return;
             }
         }
-        static void ConvertToHex(int s,ref int count) // pentru afisarea coloanei offsetului
+        static void ConvertToHexOffset(int s) // pentru afisarea coloanei offsetului
         {
             int intreg = s;
             int b2 = 16;
@@ -147,7 +146,7 @@ namespace hexviewer
                 intreg = intreg / b2;
                 count2++;
             }
-            string[] hexb = new string[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f" };
+            string[] hexb = new string[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F" };
 
             for (int i = 0; i < r.Length; i++)
             {
@@ -160,13 +159,10 @@ namespace hexviewer
                 }
             }
             int offsethelper = r.Length;
-            if (count == 0)
+            while (offsethelper < 8) // pentru a avea 0-uri inaintea offsetului
             {
-                while (offsethelper < 8)
-                {
-                    Console.Write("0");
-                    offsethelper++;
-                }
+                Console.Write("0");
+                offsethelper++;
             }
             for (int i = r.Length - 2; i >= 0; i--)
             {
@@ -197,7 +193,7 @@ namespace hexviewer
                 intreg = intreg / b2;
                 count2++;
             }
-            string[] hexb = new string[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f" };
+            string[] hexb = new string[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F" };
 
             for (int i = 0; i < r.Length; i++)
             {
@@ -209,7 +205,7 @@ namespace hexviewer
                     }
                 }
             }
-            if (r.Length < 3)
+            if (r.Length < 3) // pentru a avea o lungime hex de minim 2 caractere.
             {
                 Console.Write("0");
                 if(r.Length < 2)
